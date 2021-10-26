@@ -1,3 +1,11 @@
+/**
+* @file ToGui.h
+* @brief Klassen som skickar data till GUI.
+* @author Christoffer Rova
+* @version 1.0
+* @date 2021-10-26
+*/
+
 #define _WINSOCK_DEPRECATED_NO_WARNINGS
 #pragma once
 #ifdef _WIN32

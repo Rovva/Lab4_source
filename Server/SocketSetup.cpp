@@ -4,31 +4,23 @@ SocketSetup::SocketSetup() {
 
     RecvSocket = socket(AF_INET, SOCK_STREAM, 0);
 
-    // Fill memory locations for server variable.
+	// Nulla minnet i området där server lagras eftersom det kan finnas gammal data där.
     memset(&server, '0', sizeof(server));
-    //Prepare the sockaddr_in structure
+	
     server.sin_family = AF_INET;
     server.sin_addr.s_addr = INADDR_ANY;
     server.sin_port = htons(49152);
 
     bind(RecvSocket, (struct sockaddr*)&server, sizeof(server));
 
-    /*Bind
-    if ( == SOCKET_ERROR)
-    {
-        printf("Bind failed with error code : %d", WSAGetLastError());
-    }
-
-    puts("Bind done");*/
-
-    //Listen to incoming connections
+	// Lyssna efter inkommande anslutningar.
     listen(RecvSocket, 3);
 
-    //Accept and incoming connection
     puts("Waiting for incoming connections...");
 
 }
 
+// Returnerar den socket som skapats i denna klass.
 int SocketSetup::getSocket() {
     return RecvSocket;
 }

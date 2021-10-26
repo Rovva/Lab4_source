@@ -1,19 +1,20 @@
 #include "ReaderThread.h"
 
-// Constructor that takes a Socket as a parameter and stores it locally.
+// Konstruktor som tar en socket som parameter och lagrar den lokalt.
 ReaderThread::ReaderThread(int socket) {
 	RecvSocket = socket;
 	clientID = -1;
 }
 
-// This function creates an unique id for the client.
+// Den här metoden skapar ett unikt id för en klient.
 int ReaderThread::createID(std::vector<Client*> *clients) {
 	int id = 1;
-	// If there is no clients then assign the client the id 1.
+
+	// Om det inte finns några klienter så låt den nya klienten få id 1.
 	if (clients->size() == 0) {
 		return id;
-	// If there already exists clients in the vector then go through all to
-	// assign a unique id to the connected client.
+	// Om det redan finns klienter i vektorn så gå igenom alla för att hitta
+	// ett unikt id som kan ges till den nyligen anslutna klienten.
 	} else {
 		bool idFound = true;
 		while (idFound) {
@@ -29,11 +30,12 @@ int ReaderThread::createID(std::vector<Client*> *clients) {
 	}
 }
 
-// This function creates a position that is not occupied by going through all
-// clients and check what position in x-direction is free.
+// Den här metoden skapar en position som det inte står någon annan klient på
+// genom att gå igenom alla klienterna och kolla vad som är ledigt i x-led.
 Coordinate ReaderThread::createPosition(std::vector<Client*> *clients) {
 	std::cout << "Creating startposition...\n";
 	Coordinate pos;
+	// -100 är standard positionen.
 	pos.x = -100;
 	pos.y = -100;
 	for (int i = 0; i < clients->size(); i++) {
@@ -45,14 +47,15 @@ Coordinate ReaderThread::createPosition(std::vector<Client*> *clients) {
 	return pos;
 }
 
-// Function that checks if a move is valid or not.
+// Metod som kollar om en ny position är giltlig eller inte.
 Coordinate ReaderThread::checkMove(int id, Coordinate newPosition, std::vector<Client*> *clients) {
-	// Create a Coordinate variable and assign -100 in both x and y.
+	// Skapa en koordinat variabel och lagra -100 i både x och y.
 	Coordinate oldPosition;
 	oldPosition.x = -100;
 	oldPosition.y = -100;
-	// Loop through all clients and check if the clients ID has any old coordinates.
-	// If not, then assign -100, -100.
+	
+	// Gå igenom alla klienterna och kolla om klienten har någon gammala koordinater.
+	// Om inte, så ge den -100, -100.
 	bool empty = false;
 	for (int i = 0; i < clients->size(); i++) {
 		if (clients->at(i)->getClientID() == id) {
@@ -68,7 +71,8 @@ Coordinate ReaderThread::checkMove(int id, Coordinate newPosition, std::vector<C
 	if (empty) {
 		oldPosition = createPosition(clients);
 	}
-	// Check the coordinates so that they do not move outside the coordinates.
+
+	// Kolla så att koordinaterna inte är utanför spelplanen.
 	if (newPosition.x < -100 || newPosition.y < -100) {
 		std::cout << "Coordinates are less than -100.\n";
 		return oldPosition;
@@ -76,8 +80,9 @@ Coordinate ReaderThread::checkMove(int id, Coordinate newPosition, std::vector<C
 	if (newPosition.x > 100 || newPosition.y > 100) {
 		std::cout << "Coordinates are greater than 100.\n";
 	}
-	// Then check if the new coordinates are already occupied by looping through
-	// all the clients and if it is, then set isOccupied flag as true.
+
+	// Kolla sedan så att de nya koordinaterna inte är upptagna genom att loopa
+	// igenom alla klienterna. Om platsen är upptagen så sätt flaggan isOccupied till true.
 	bool isOccupied = false;
 	for (int i = 0; i < clients->size(); i++) {
 		if (clients->at(i)->getPosition().x == newPosition.x && clients->at(i)->getPosition().y == newPosition.y) {
@@ -85,7 +90,8 @@ Coordinate ReaderThread::checkMove(int id, Coordinate newPosition, std::vector<C
 			break;
 		}
 	}
-	// If the spot is already occupied then send the old coordinates to clients.
+
+	// Om de nya koordinaterna är upptagen så skicka de gamla koordinaterna.
 	if (isOccupied) {
 		return oldPosition;
 	} else {
@@ -93,8 +99,7 @@ Coordinate ReaderThread::checkMove(int id, Coordinate newPosition, std::vector<C
 	}
 }
 
-// Loop through all the clients and assign new coordinates to the client with the id
-// "id".
+// Gå igenom alla klienterna och lagra de nya koordinaterna till klienten som har "id".
 void updateClientPosition(int id, Coordinate pos, std::vector<Client*>* clients) {
 	for (int i = 0; i < clients->size(); i++) {
 		if (clients->at(i)->getClientID() == id) {
@@ -104,7 +109,7 @@ void updateClientPosition(int id, Coordinate pos, std::vector<Client*>* clients)
 	}
 }
 
-// Remove a client with the id specified in the integer id.
+// Ta bort en klient med "id".
 void ReaderThread::removeClient(int id, std::vector<Client*> *clients) {
 	for (int i = 0; i < clients->size(); i++) {
 		if (clients->at(i)->getClientID() == id) {
@@ -114,7 +119,7 @@ void ReaderThread::removeClient(int id, std::vector<Client*> *clients) {
 	}
 }
 
-// The main loop in the ReadThread thread.
+// Den huvudsakliga loopen som ska köras i en tråd.
 void ReaderThread::operator()(Broadcaster *broad) {
 	std::cout << "ReaderThread starting...\n";
 	int recvbuflen = 1024;
@@ -128,33 +133,40 @@ void ReaderThread::operator()(Broadcaster *broad) {
 			printf("Bytes received: %d\n", iResult);
 			msgHead = (MsgHead*)recvbuf;
 
-			// When a client joins, create id and position and send it to all the clients.
+			// När en klient ansluter, skapa ett unikt id och position och skicka det till alla klienter.
 			if (msgHead->type == Join) {
 				std::cout << "JOIN RECIEVED!\n";
 				broad->incrementSeq();
 				std::cout << "seq in readerthread is now: " << broad->getSeq();
 				JoinMsg join;
-				// Create a unique id.
+				
+				// Skapa ett unikt id.
 				clientID = createID(broad->getClients());
 				join.head.id = clientID;
-				// Assign message type to the message.
+				
+				// Sätt meddelandetyp till "Join".
 				join.head.type = Join;
+				
+				// Plussa på seq med 1.
 				broad->incrementSeq();
 				join.head.seq_no = broad->getSeq();
-				// Specify the length of the message.
+				
+				// Ange storleken på meddelandet.
 				join.head.length = sizeof(join);
 
-				// Create a new client object with the id.
+				// Skapa en ny klient med det unika idet.
 				Client* tmpclient = new Client(clientID, RecvSocket);
-				// Add it to the vector.
+				
+				// Lägg till klienten i vektorn.
 				broad->getClients()->push_back(tmpclient);
 				std::cout << "Sending ID: " << join.head.id << "\n";
 				std::cout << "SEQ in ReaderThread is now: " << broad->getSeq() << "\n";
-				// Broadcast the message to all the clients.
+				
+				// Skicka meddelandet till alla klienterna.
 				broad->SendMessageToAll((char*)&join, sizeof(join));
 
-				// Create a new message that alerts all clients that there is a
-				// new one connected.
+				// Skapa ett nytt meddelande som informerar alla klienterna att
+				// en ny klient har anslutit.
 				ChangeMsg newPlayer;
 				newPlayer.head.id = clientID;
 				broad->incrementSeq();
@@ -164,34 +176,39 @@ void ReaderThread::operator()(Broadcaster *broad) {
 
 				std::cout << "SEQ in ReaderThread is now: " << broad->getSeq() << "\n";
 
-				// Broadcast the New player message to everyone.
+				// Skicka det ovan nämnda meddelande till alla.
 				broad->SendMessageToAll((char*)&newPlayer, sizeof(newPlayer));
 
-				// Create a new message that specify the newly connected client
-				// position.
+				// Skapa ett nytt meddelande som anger den nyligen anslutna klientens
+				// unika position.
 				NewPlayerPositionMsg newPosition;
-				// Create a unique position.
+				
+				// Skapa en unik position.
 				newPosition.pos = createPosition(broad->getClients());
 				std::cout << "Populating header...\n";
-				// Populate headers with types and the clients id.
+				
+				// Fyll all nödvändig data i meddelandet.
 				newPosition.msg.type = NewPlayerPosition;
 				newPosition.msg.head.id = clientID;
 				broad->incrementSeq();
 				newPosition.msg.head.seq_no = broad->getSeq();
 				newPosition.msg.head.type = Change;
 				std::cout << "Sending startposition to client id: " << clientID << " \n";
-				// Update the client position in the clients vector.
+				
+				// Uppdatera klientens position i vektorn med sparade klienter.
 				updateClientPosition(newPosition.msg.head.id, newPosition.pos, broad->getClients());
 
 				std::cout << "SEQ in ReaderThread is now: " << broad->getSeq() << "\n";
-				// Send the mesage to everyone connected.
+				
+				// Skicka meddelandet till alla.
 				broad->SendMessageToAll((char*)&newPosition, sizeof(newPosition));
 
 			} else if (msgHead->type == Leave) {
 				std::cout << "LEAVE RECIEVED!\n";
 				broad->incrementSeq();
-				// When a client sends a leave message to the server then
-				// create a message that the client has left the game.
+				
+				// När en klient skickar ett "Leave" meddelande till servern
+				// så skapa ett meddelande om att klienten har lämnat spelen.
 				ChangeMsg playerLeave;
 				playerLeave.type = PlayerLeave;
 				playerLeave.head.id = msgHead->id;
@@ -200,6 +217,8 @@ void ReaderThread::operator()(Broadcaster *broad) {
 				playerLeave.head.type = Change;
 
 				std::cout << "SEQ in ReaderThread is now: " << broad->getSeq() << "\n";
+				
+				// Skicka meddelandet till alla klienterna.
 				broad->SendMessageToAll((char*)&playerLeave, sizeof(playerLeave));
 
 				removeClient(msgHead->id, broad->getClients());
@@ -207,10 +226,10 @@ void ReaderThread::operator()(Broadcaster *broad) {
 			} else if (msgHead->type == Event) {
 				std::cout << "EVENT RECIEVED!\n";
 				broad->incrementSeq();
-				// When a client sends a move event, the server will check the
-				// new coordinates so that they are valid and then update the
-				// position for the client in the clients vector and broadcast
-				// the new coordinates to all other clients connected.
+				
+				// När en klient skickar ett "MoveEvent" så kollar server om dem
+				// nya koordinaterna är tomma och sedan uppdaterar klientens position
+				// för att sedan meddela alla klienterna om den nya positionen.
 				MoveEvent* moveEvent;
 				moveEvent = (MoveEvent*)recvbuf;
 
@@ -231,9 +250,9 @@ void ReaderThread::operator()(Broadcaster *broad) {
 		} else if (iResult == 0) {
 			printf("Connection closed\n");
 		} else {
-			// If the client closes the connection by exiting the clientprogram
-			// the server will send a message to all other clients that the id
-			// bound to that client has left the game.
+			// Om klienten stänger anslutningen genom att stänga av programmet
+			// så meddelar servern alla klienterna om att en klient med visst
+			// id har lämnat spelet.
 			ChangeMsg playerLeave;
 			playerLeave.type = PlayerLeave;
 			playerLeave.head.id = clientID;

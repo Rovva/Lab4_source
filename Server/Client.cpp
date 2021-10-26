@@ -1,29 +1,29 @@
 #include "Client.h"
 
-// Constructor for a client takes two parameters, id and socket,
-// id is the clients id and socket is the newly created socket from
-// ConnectionThread.
+// Konstruktor för en klient som tar emot id och socket. id är clientens id
+// och socket är den nyligen skapade socket från ConnectionThread.
 Client::Client(int id, int socket) {
 	clientID = id;
 	clientSocket = socket;
 }
 
-// Return the client id.
+// Returnera klientens id.
 int Client::getClientID() {
 	return clientID;
 }
 
-// Sets a new position with the given Coordinate in parameter.
+// Ändrar position på klienten.
 void Client::setPosition(Coordinate newPosition) {
 	position = newPosition;
 }
 
 // Returns the clients position in a Coordinate type variable.
+// Returnerar klientens position iform av "Coordinate" typ.
 Coordinate Client::getPosition() {
 	return position;
 }
 
-// Returns the stored socket specific for this client.
+// Returnerar den lagrade socketen för klienten.
 int Client::getSocket() {
 	return clientSocket;
 }

@@ -1,22 +1,35 @@
-// Klassen för att hålla reda på ID och position för en klient.
-
 #include "Client.h"
 
+/**
+ * Konstruktorn för Client.
+ * @param[in] id Vad för id som Client objektet ska ha.
+ * @param[in] position Vilken position objektet ska ha.
+*/
 Client::Client(int id, Coordinate position) {
 	clientID = id;
 	clientPosition = position;
 }
-// Funktion för att returnera klientens ID.
+
+/**
+ * Returnera ID för klienten.
+ * @param[out] clientID
+*/
 int Client::getClientID() {
 	return clientID;
 }
 
-// Returnera positionen som är lagrad.
+/**
+ * Returnera Coordinate värdet klienten har.
+ * @param[out] clientPosition
+*/
 Coordinate Client::getPosition() {
 	return clientPosition;
 }
 
-// Ändra klientens position.
+/**
+ * Ändra klientens Coordinate värde.
+ * @param[in] position
+*/
 void Client::changeCoordinate(Coordinate position) {
 	clientPosition = position;
 }

@@ -19,26 +19,28 @@
 int main()
 {
     int test = 0;
-    // Create a vector that cóntains all the clients.
+
+	// Skapa en vektor som lagrar alla klienterna.
     std::vector<Client*>* clients = new std::vector<Client*>;
 
+	// Seq används för att beräkna sekvensnummret som skickas i meddelanden.
     int seq = 0;
 
-    // Call SocketSetup to bind a socket.
+	// Skapa SocketSetup objekt för att upprätta en socket som klienter ansluter till.
     SocketSetup* socket = new SocketSetup();
 
-    // Store the socket created above and send it to other classes.
+	// Lagra den tidigare skapade socketen.
     int RecvSocket = socket->getSocket();
+	// Lagra serveradressen.
     sockaddr_in server = socket->getServer();
 
-    // Create Broadcaster object that handles sending messages to all the clients.
+	// Skapa Broadcaster objekt som skickar meddelanden till alla klienterna.
     Broadcaster* broad = new Broadcaster(clients);
 
-    // Create a thread that runs ConnectionThread object that handles all the
-    // accepted connections.
+	// Skapa ConnectionThread objektet och kör den i en tråd.
     std::thread connection(ConnectionThread(&RecvSocket, server), broad, &seq);
     connection.detach();
-
+	// Loopa i oändligheten.
     while (1) {
 
     }
