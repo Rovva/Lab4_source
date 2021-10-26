@@ -37,12 +37,6 @@ ToGui::ToGui() {
     inet_pton(PF_INET6, "::1", &SendAddr.sin6_addr);
 }
 
-/**
-*	Metoden som skickar ett "MoveEvent" meddelande till servern.
-*	@param[in]	x	X-koordinat
-*	@param[in]	y	Y-koordinat
-*	@param[in]	z	Färg
-*/
 void ToGui::SendMoveToGui(int x, int y, int z) {
     char move[] = { 0, x, y, z };
 
@@ -71,14 +65,19 @@ void ToGui::ResetBoard() {
 
 void ToGui::operator()(int *localClientID, std::vector<Client*> *clients, bool *updateFlag) {
     while (1) {
+		// När updateFlag är true så är det dags att uppdatera spelplanen.
         if (*updateFlag == true) {
             int x = 0, y = 0, z = 0;
+			// Rensa spelplanen.
             this->ResetBoard();
+			// Gå igenom alla klienterna i vektorn och skicka deras positioner och färg till SendMoveToGui metoden.
             for (int i = 0; i < clients->size(); i++) {
                 x = clients->at(i)->getPosition().x;
                 y = clients->at(i)->getPosition().y;
+				// Om klienten i vektorn har samma id som den lokala klienten så ska den vara blå.
                 if (clients->at(i)->getClientID() == *localClientID) {
                     z = 4;
+				// Annars röd.
                 } else {
                     z = 2;
                 }

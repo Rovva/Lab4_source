@@ -1,6 +1,5 @@
 #include "ReaderThread.h"
 
-// Konstruktor som tar emot en socket som sedan lagras lokalt.
 ReaderThread::ReaderThread(SOCKET Socket) {
     ConnectSocket = Socket;
     std::cout << "Starting ReaderThread." << std::endl;

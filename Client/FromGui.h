@@ -33,12 +33,12 @@ private:
 	int iResult;
 public:
 	/**
-	*	@brief Konstruktor för FromGui.
+	*	Konstruktor för FromGui.
 	*/
 	FromGui();
 	
 	/**
-	*	@brief Funktionen som ska köras om och om igen i en tråd.
+	*	Funktionen som ska köras om och om igen i en tråd.
 		@param[in]	*localClientID	Vilket id som den lokala klienten har.
 		@param[in]	*seq			Variabeln som lagrar vilket sekvensnummer som är giltligt.
 		@param[in]	clients			Vektorn som lagrar alla klienter.

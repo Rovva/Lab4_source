@@ -30,11 +30,11 @@ private:
 	SOCKET ConnectSocket;
 public:
 	/**
-	*	@brief Konstruktorn som tar emot en socket som lagras lokalt.
+	*	Konstruktor som tar emot en socket som lagras lokalt.
 	*/
 	ReaderThread(SOCKET ConnectSocket);
 	/**
-	*	@brief Funktionen som ska köras om och om igen i en tråd.
+	*	Funktionen som ska köras om och om igen i en tråd och analyserar alla meddelanden från servern.
 	*	@param[in]	*seq	Variabeln som lagrar vilket sekvensnummer för meddelanden.
 	*	@param[in]	*localClientID	Variabel som lagrar den lokala klientens ID.
 	*	@param[in]	*startPosition	Startposition för den lokala klienten.
