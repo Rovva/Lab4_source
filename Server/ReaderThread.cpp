@@ -93,6 +93,7 @@ Coordinate ReaderThread::checkMove(int id, Coordinate newPosition, std::vector<C
 
 	// Om de nya koordinaterna är upptagen så skicka de gamla koordinaterna.
 	if (isOccupied) {
+		std::cout << "Collision detected!\n";
 		return oldPosition;
 	} else {
 		return newPosition;
