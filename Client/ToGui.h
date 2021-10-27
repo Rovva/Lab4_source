@@ -1,6 +1,6 @@
 /**
+* Klassen som skickar data till GUI.
 * @file ToGui.h
-* @brief Klassen som skickar data till GUI.
 * @author Christoffer Rova
 * @version 1.0
 * @date 2021-10-26

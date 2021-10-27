@@ -1,6 +1,6 @@
 /**
+* Klassen som etablerar en anslutning till servern.
 * @file ConnectToServer.h
-* @brief Klassen som etablerar en anslutning till servern.
 * @author Christoffer Rova
 * @version 1.0
 * @date 2021-10-26
@@ -23,10 +23,12 @@ public:
 	*	Konstruktorn.
 	*/
 	ConnectToServer();
+	
 	/**
 	*	Metoden som etablerar en anslutning till servern.
 	*/
 	int setupConnection();
+	
 	/**
 	*	Den här metoden returnerar den socket som etablerats tidigare.
 	*	@param[out]	ConnectSocket

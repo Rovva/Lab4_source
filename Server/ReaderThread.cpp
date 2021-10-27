@@ -1,12 +1,10 @@
 #include "ReaderThread.h"
 
-// Konstruktor som tar en socket som parameter och lagrar den lokalt.
 ReaderThread::ReaderThread(int socket) {
 	RecvSocket = socket;
 	clientID = -1;
 }
 
-// Den här metoden skapar ett unikt id för en klient.
 int ReaderThread::createID(std::vector<Client*> *clients) {
 	int id = 1;
 
@@ -30,8 +28,6 @@ int ReaderThread::createID(std::vector<Client*> *clients) {
 	}
 }
 
-// Den här metoden skapar en position som det inte står någon annan klient på
-// genom att gå igenom alla klienterna och kolla vad som är ledigt i x-led.
 Coordinate ReaderThread::createPosition(std::vector<Client*> *clients) {
 	std::cout << "Creating startposition...\n";
 	Coordinate pos;
@@ -47,7 +43,6 @@ Coordinate ReaderThread::createPosition(std::vector<Client*> *clients) {
 	return pos;
 }
 
-// Metod som kollar om en ny position är giltlig eller inte.
 Coordinate ReaderThread::checkMove(int id, Coordinate newPosition, std::vector<Client*> *clients) {
 	// Skapa en koordinat variabel och lagra -100 i både x och y.
 	Coordinate oldPosition;
@@ -100,8 +95,7 @@ Coordinate ReaderThread::checkMove(int id, Coordinate newPosition, std::vector<C
 	}
 }
 
-// Gå igenom alla klienterna och lagra de nya koordinaterna till klienten som har "id".
-void updateClientPosition(int id, Coordinate pos, std::vector<Client*>* clients) {
+void ReaderThread::updateClientPosition(int id, Coordinate pos, std::vector<Client*>* clients) {
 	for (int i = 0; i < clients->size(); i++) {
 		if (clients->at(i)->getClientID() == id) {
 			clients->at(i)->setPosition(pos);
@@ -110,7 +104,6 @@ void updateClientPosition(int id, Coordinate pos, std::vector<Client*>* clients)
 	}
 }
 
-// Ta bort en klient med "id".
 void ReaderThread::removeClient(int id, std::vector<Client*> *clients) {
 	for (int i = 0; i < clients->size(); i++) {
 		if (clients->at(i)->getClientID() == id) {
@@ -120,7 +113,6 @@ void ReaderThread::removeClient(int id, std::vector<Client*> *clients) {
 	}
 }
 
-// Den huvudsakliga loopen som ska köras i en tråd.
 void ReaderThread::operator()(Broadcaster *broad) {
 	std::cout << "ReaderThread starting...\n";
 	int recvbuflen = 1024;

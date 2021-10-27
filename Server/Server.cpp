@@ -1,3 +1,11 @@
+/**
+* Där allting börjar.
+* @file Server.cpp
+* @author Christoffer Rova
+* @version 1.0
+* @date 2021-10-26
+*/
+
 #include <iostream>
 #include <vector>
 #include <thread>

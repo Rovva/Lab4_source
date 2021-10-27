@@ -1,11 +1,9 @@
 #include "WriterThread.h"
 
-// Konstruktor som tar emot en socket och lagrar den lokalt.
 WriterThread::WriterThread(SOCKET socket) {
 	ConnectSocket = socket;
 }
 
-// Metoden som skickar ett "Join" meddelande.
 void WriterThread::sendJoin() {
     int sendMsg = 0;
 	// Fyll meddelandet med data som behövs.
@@ -20,7 +18,6 @@ void WriterThread::sendJoin() {
     printf("Bytes Sent: %ld\n", sendMsg);
 }
 
-// Metoden som skickar ett "Leave" meddelande till servern.
 void WriterThread::sendLeave(int id) {
     int sendMsg = 0;
 	// Lagra det id som den lokala klienten har i meddelandet.
@@ -35,8 +32,6 @@ void WriterThread::sendLeave(int id) {
     printf("Bytes Sent: %ld\n", sendMsg);
 }
 
-// Function for sending a request to move the clients position.
-// Metoden som skickar en "MoveEvent" till servern. (Skickar förfrågan om att förflytta klienten)
 void WriterThread::sendMoveEvent(int id, Coordinate position, int *seq) {
     int sendMsg = 0, newSeq = 0;
 

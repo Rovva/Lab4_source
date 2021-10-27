@@ -1,6 +1,6 @@
 /**
+* Klassen som tar emot och hanterar data från GUI.
 * @file FromGui.h
-* @brief Klassen som tar emot och hanterar data från GUI.
 * @author Christoffer Rova
 * @version 1.0
 * @date 2021-10-26
@@ -26,7 +26,7 @@
 
 class FromGui {
 private:
-	SOCKET RecvSocket; ///< Variabel som lagrar en socket
+	SOCKET RecvSocket;
 	sockaddr_in6 RecvAddr;
 	sockaddr_in6 server, si_other;
 	int slen, recv_len;

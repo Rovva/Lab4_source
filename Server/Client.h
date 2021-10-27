@@ -1,3 +1,10 @@
+/**
+* Klassen som hanterar klienter.
+* @file Client.h
+* @author Christoffer Rova
+* @version 1.0
+* @date 2021-10-26
+*/
 #pragma once
 
 #include <sys/types.h>
@@ -17,9 +24,30 @@ private:
 	Coordinate position;
 	int clientSocket;
 public:
+	/**
+	*	Konstruktor som tar emot ID och socket.
+	*	@param[in]		id		Klient-id.
+	*	@param[in]		socket	Klientens socket.
+	*/
 	Client(int id, int socket);
+	
+	/**
+	*	Den här metoden returnerar klientens id.
+	*/
 	int getClientID();
+	
+	/**
+	*	Den här metoden returnerar klientens position.
+	*/
 	Coordinate getPosition();
+	
+	/**
+	*	Denna metod ändrar klientens position.
+	*/
 	void setPosition(Coordinate newPosition);
+	
+	/**
+	*	Denna metod returnerar klientens socket.
+	*/
 	int getSocket();
 };

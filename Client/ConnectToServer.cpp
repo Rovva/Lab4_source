@@ -54,10 +54,7 @@ int ConnectToServer::setupConnection() {
         return 1;
     }
 }
-/**
-*	Metoden returnerar den socket som skapats tidigare.
-*	@param[out] ConnectSocket
-*/
+
 SOCKET ConnectToServer::getSocket() {
     return ConnectSocket;
 }

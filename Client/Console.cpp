@@ -1,6 +1,6 @@
 /**
+* Där allting börjar.
 * @file Console.cpp
-* @brief Där allting börjar.
 * @author Christoffer Rova
 * @version 1.0
 * @date 2021-10-26

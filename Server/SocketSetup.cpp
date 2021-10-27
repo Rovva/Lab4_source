@@ -20,7 +20,6 @@ SocketSetup::SocketSetup() {
 
 }
 
-// Returnerar den socket som skapats i denna klass.
 int SocketSetup::getSocket() {
     return RecvSocket;
 }
