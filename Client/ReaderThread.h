@@ -36,7 +36,7 @@ public:
 	
 	/**
 	*	Funktionen som ska köras om och om igen i en tråd och analyserar alla meddelanden från servern.
-	*	@param[in]	*seq	Variabeln som lagrar vilket sekvensnummer för meddelanden.
+	*	@param[in]	*seq			Variabeln som lagrar vilket sekvensnummer för meddelanden.
 	*	@param[in]	*localClientID	Variabel som lagrar den lokala klientens ID.
 	*	@param[in]	*startPosition	Startposition för den lokala klienten.
 	*	@param[in]	*clients		Vektorn som lagrar alla klienterna.

@@ -22,8 +22,8 @@ private:
 public:
 	/**
 	*	Konstruktorn för Client.
-	*	@param[in]	id Vad för id som Client objektet ska ha.
-	*	@param[in]	position Vilken position objektet ska ha.
+	*	@param[in]	id			Vad för id som Client objektet ska ha.
+	*	@param[in]	position	Vilken position objektet ska ha.
 	*/
 	Client(int id, Coordinate position);
 	
